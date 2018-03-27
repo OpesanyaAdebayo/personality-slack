@@ -1,0 +1,26 @@
+{
+  "name": "personality-slack",
+  "version": "1.0.0",
+  "description": "A slack bot that lets you access IBM Watson Personality Insights API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpesanyaAdebayo/personality-slack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OpesanyaAdebayo/personality-slack/issues"
+  },
+  "homepage": "https://github.com/OpesanyaAdebayo/personality-slack#readme",
+  "dependencies": {
+    "@slack/events-api": "^1.0.1",
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "request": "^2.85.0"
+  }
+}
