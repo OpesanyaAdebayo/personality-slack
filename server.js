@@ -28,7 +28,7 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
 slackEvents.on('message', (event)=> {
     console.log(event);
-    if(event.text.charAt(0) == "@") {
+    if(event.message.text.charAt(0) == "@") {
         console.log("entered handle");
     }
 //   console.log(`Received a message event: user ${event.user} in channel ${event.channel} says ${event.text}`);
@@ -63,7 +63,7 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
                             "name": "twitter",
                             "text": "Twitter Handle",
                             "type": "button",
-                            "value": "Please enter your Twitter Handle",
+                            "value": "Please enter your Twitter Handle (include the @ symbol).",
                             "style": "primary"
                         },
                         {
