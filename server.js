@@ -9,12 +9,12 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3200;
 
-const {
-    IncomingWebhook,
-    WebClient
-} = require('@slack/client');
-const web = new WebClient(token);
-const botToken = process.env.BOT_TOKEN;
+// const {
+//     IncomingWebhook,
+//     WebClient
+// } = require('@slack/client');
+// const web = new WebClient(token);
+// const botToken = process.env.BOT_TOKEN;
 
 
 // Initialize using verification token from environment variables
