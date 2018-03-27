@@ -33,7 +33,7 @@ app.post('/slack/events', function(req, res) {
 });
 
 
-app.post('/slack/slash-commands/send-me-buttons', urlencodedParser, (req, res) =>{
+app.post('/slack/commands', urlencodedParser, (req, res) =>{
     res.status(200).end(); // best practice to respond with empty 200 status code
     var reqBody = req.body;
     var responseURL = reqBody.response_url;
