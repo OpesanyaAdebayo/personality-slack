@@ -9,9 +9,6 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3200;
 
-
-console.log("listening");
-
 // Initialize using verification token from environment variables
 const createSlackEventAdapter = require('@slack/events-api').createSlackEventAdapter;
 const slackEvents = createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN);
@@ -41,32 +38,34 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
         res.status(403).end("Access forbidden");
     }else{
         var message = {
-            "text": "This is your first interactive message",
+            "text": "Hi, My name is Watson. I can help you discover yourself.",
             "attachments": [
                 {
-                    "text": "Building buttons is easy right?",
+                    "text": "How would you like to give me information?",
                     "fallback": "Shame... buttons aren't supported in this land",
-                    "callback_id": "button_tutorial",
+                    "callback_id": "info_option",
                     "color": "#3AA3E3",
                     "attachment_type": "default",
                     "actions": [
                         {
-                            "name": "yes",
-                            "text": "yes",
+                            "name": "twitter",
+                            "text": "Twitter Handle",
                             "type": "button",
-                            "value": "yes"
+                            "value": "twitter",
+                            "style": "primary"
                         },
                         {
-                            "name": "no",
-                            "text": "no",
+                            "name": "text",
+                            "text": "My own text",
                             "type": "button",
-                            "value": "no"
+                            "value": "text",
+                            "style": "success"
                         },
                         {
-                            "name": "maybe",
-                            "text": "maybe",
+                            "name": "cancel",
+                            "text": "Never mind.",
                             "type": "button",
-                            "value": "maybe",
+                            "value": "cancel",
                             "style": "danger"
                         }
                     ]
@@ -98,8 +97,8 @@ app.post('/slack/actions', urlencodedParser, (req, res) =>{
     res.status(200).end(); // best practice to respond with 200 status
     var actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
     var message = {
-        "text": actionJSONPayload.user.name+" clicked: "+actionJSONPayload.actions[0].name,
-        "replace_original": false
+        "text": actionJSONPayload.user.name+" clicked: "+actionJSONPayload.actions[0].text,
+        "replace_original": true
     };
     sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
 });
