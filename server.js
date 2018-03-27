@@ -24,3 +24,7 @@ slackEvents.on('message', (event)=> {
 
 // Handle errors (see `errorCodes` export)
 slackEvents.on('error', console.error);
+
+app.post('/slack/events', function(req, res) {
+    res.send("received!");
+});
