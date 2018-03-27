@@ -37,7 +37,7 @@ app.post('/slack/slash-commands/send-me-buttons', urlencodedParser, (req, res) =
     res.status(200).end(); // best practice to respond with empty 200 status code
     var reqBody = req.body;
     var responseURL = reqBody.response_url;
-    if (reqBody.token != YOUR_APP_VERIFICATION_TOKEN){
+    if (reqBody.token != SLACK_VERIFICATION_TOKEN){
         res.status(403).end("Access forbidden");
     }else{
         var message = {
@@ -72,11 +72,27 @@ app.post('/slack/slash-commands/send-me-buttons', urlencodedParser, (req, res) =
                     ]
                 }
             ]
-        }
-        sendMessageToSlackResponseURL(responseURL, message)
+        };
+        sendMessageToSlackResponseURL(responseURL, message);
     }
-})
+});
 
+
+function sendMessageToSlackResponseURL(responseURL, JSONmessage){
+    var postOptions = {
+        uri: responseURL,
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        json: JSONmessage
+    };
+    request(postOptions, (error, response, body) => {
+        if (error){
+            // handle errors as you see fit
+        }
+    });
+}
 
 // Start the express application
 http.createServer(app).listen(port, () => {
