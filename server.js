@@ -9,6 +9,14 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3200;
 
+const {
+    IncomingWebhook,
+    WebClient
+} = require('@slack/client');
+const web = new WebClient(token);
+const botToken = process.env.BOT_TOKEN;
+
+
 // Initialize using verification token from environment variables
 const createSlackEventAdapter = require('@slack/events-api').createSlackEventAdapter;
 const slackEvents = createSlackEventAdapter(process.env.SLACK_VERIFICATION_TOKEN);
@@ -49,7 +57,7 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
                     "actions": [
                         {
                             "name": "twitter",
-                            "text": "Twitter Handle",
+                            "text": "Please enter your Twitter Handle",
                             "type": "button",
                             "value": "twitter",
                             "style": "primary"
@@ -79,9 +87,10 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
 
 app.post('/slack/actions', urlencodedParser, (req, res) =>{
     res.status(200).end(); // best practice to respond with 200 status
+    console.log(JSON.parse(req.body.payload));
     var actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
     var message = {
-        "text": `I would like to give ${actionJSONPayload.actions[0].text}`,
+        "text": `${actionJSONPayload.actions[0].text}`,
         "replace_original": true
     };
     sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
