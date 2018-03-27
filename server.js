@@ -1,11 +1,14 @@
 require('dotenv').config();
+const http = require('http');
 const express = require('express');
 const request = require('request');
 var bodyParser = require('body-parser');
 const app = express();
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json());
-app.listen(3200);
+
+const port = process.env.PORT || 3200;
+
 
 console.log("listening");
 
@@ -26,5 +29,10 @@ slackEvents.on('message', (event)=> {
 slackEvents.on('error', console.error);
 
 app.post('/slack/events', function(req, res) {
-    res.send("received!");
+    console.log("hello");
 });
+
+// Start the express application
+http.createServer(app).listen(port, () => {
+    console.log(`server listening on port ${port}`);
+  });
