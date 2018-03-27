@@ -27,7 +27,7 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 
 // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
 slackEvents.on('message', (event)=> {
-    console.log(event);
+    console.log(`Received a message event: user ${event.user} in channel ${event.channel} says ${event.text}`);
 //   console.log(`Received a message event: user ${event.user} in channel ${event.channel} says ${event.text}`);
 });
 
@@ -95,6 +95,10 @@ app.post('/slack/actions', urlencodedParser, (req, res) =>{
         "replace_original": true
     };
     sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
+
+    if(actionJSONPayload.actions[0].name == "twitter") {
+
+    }
 });
 
 
