@@ -1,5 +1,3 @@
-import { type } from 'os';
-
 require('dotenv').config();
 const http = require('http');
 const express = require('express');
