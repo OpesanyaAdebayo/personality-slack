@@ -30,6 +30,7 @@ slackEvents.on('message', (event)=> {
     console.log(event);
     if(!event.message.text) {
         console.log("didn't enter handle");
+        return;
     }
     else if(event.text.charAt(0) == "@") {
         console.log("entered handle");
