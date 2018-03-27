@@ -57,9 +57,9 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
                     "actions": [
                         {
                             "name": "twitter",
-                            "text": "Please enter your Twitter Handle",
+                            "text": "Twitter Handle",
                             "type": "button",
-                            "value": "twitter",
+                            "value": "Please enter your Twitter Handle",
                             "style": "primary"
                         },
                         {
@@ -87,10 +87,10 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
 
 app.post('/slack/actions', urlencodedParser, (req, res) =>{
     res.status(200).end(); // best practice to respond with 200 status
-    console.log(JSON.parse(req.body.payload));
+    // console.log(JSON.parse(req.body.payload));
     var actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
     var message = {
-        "text": `${actionJSONPayload.actions[0].text}`,
+        "text": `${actionJSONPayload.actions[0].value}`,
         "replace_original": true
     };
     sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
