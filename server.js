@@ -77,6 +77,17 @@ app.post('/slack/commands', urlencodedParser, (req, res) =>{
 });
 
 
+app.post('/slack/actions', urlencodedParser, (req, res) =>{
+    res.status(200).end(); // best practice to respond with 200 status
+    var actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
+    var message = {
+        "text": `I would like to give ${actionJSONPayload.actions[0].text}`,
+        "replace_original": true
+    };
+    sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
+});
+
+
 function sendMessageToSlackResponseURL(responseURL, JSONmessage){
     var postOptions = {
         uri: responseURL,
@@ -92,16 +103,6 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage){
         }
     });
 }
-
-app.post('/slack/actions', urlencodedParser, (req, res) =>{
-    res.status(200).end(); // best practice to respond with 200 status
-    var actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
-    var message = {
-        "text": actionJSONPayload.user.name+" clicked: "+actionJSONPayload.actions[0].text,
-        "replace_original": true
-    };
-    sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
-});
 
 
 // Start the express application
