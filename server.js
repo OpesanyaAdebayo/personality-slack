@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 require('dotenv').config();
 const http = require('http');
 const express = require('express');
@@ -27,11 +29,12 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 
 // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
 slackEvents.on('message', (event)=> {
-    console.log(event);
+    // console.log(event);
     if(!event.message.text) {
-        if(event.text.charAt(0) == "@") {
-            console.log("entered handle");
-        }
+        console.log(event)
+        // if(event.text.charAt(0) == "@") {
+        //     console.log("entered handle");
+        // }
         return;
     }
     else {
