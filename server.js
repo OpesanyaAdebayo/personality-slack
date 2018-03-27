@@ -27,17 +27,7 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 
 // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
 slackEvents.on('message', (event)=> {
-    // console.log(event);
-    if(!event.message.text) {
-        console.log(event)
-        // if(event.text.charAt(0) == "@") {
-        //     console.log("entered handle");
-        // }
-        return;
-    }
-    else {
-        console.log(event.message.text);
-    }
+    console.log(event);
 //   console.log(`Received a message event: user ${event.user} in channel ${event.channel} says ${event.text}`);
 });
 
