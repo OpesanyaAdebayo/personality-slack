@@ -29,6 +29,9 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 slackEvents.on('message', (event)=> {
     console.log(event);
     if(event.message.text.charAt(0) == "@") {
+        console.log("didn't enter handle");
+    }
+    else if(event.text.charAt(0) == "@") {
         console.log("entered handle");
     }
 //   console.log(`Received a message event: user ${event.user} in channel ${event.channel} says ${event.text}`);
