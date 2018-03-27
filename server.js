@@ -28,7 +28,7 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
 slackEvents.on('message', (event)=> {
     console.log(event);
-    if(event.message.text !== undefined) {
+    if(!event.message.text) {
         console.log("didn't enter handle");
     }
     else if(event.text.charAt(0) == "@") {
