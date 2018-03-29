@@ -62,7 +62,7 @@ app.post('/api/profile', function (req, res, next) {
 
 
 app.post('/slack/commands', urlencodedParser, (req, res) => {
-  res.status(200).end(); // best practice to respond with empty 200 status code
+  // res.status(200).end(); // best practice to respond with empty 200 status code
   var reqBody = req.body;
   var responseURL = reqBody.response_url;
   if (reqBody.token != process.env.SLACK_VERIFICATION_TOKEN){
@@ -70,7 +70,7 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
   }
   else {
     var message = {text: "I am kinda working"};
-    sendMessageToSlackResponseURL(responseURL, message);
+    res.json(message);
   }
   // var responseURL = reqBody.response_url;
 
@@ -88,6 +88,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage){
   };
   request(postOptions, (error, response, body) => {
       if (error){
+
           // handle errors as you see fit
       }
   });
