@@ -25,7 +25,10 @@ const fetchTweets = (username) => {
       if (error) {
         reject(Error(error));
       }
-
+      if(newTweets.errors) {
+          console.log(newTweets.errors[0].code);
+          return reject(Error(newTweets.errors[0]));
+      }
       // Filter out tweets with only relevant info
       filteredTweets = newTweets.map(function (tweet) {
         return {
