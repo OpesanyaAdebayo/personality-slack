@@ -14,6 +14,7 @@
     "helmet": "^0.13.0",
     "i18next": "^1.10.2",
     "morgan": "^1.6.1",
+    "personality-text-summary": "^2.2.0",
     "request": "^2.85.0",
     "twitter": "^1.7.1",
     "watson-developer-cloud": "^3.2.1"

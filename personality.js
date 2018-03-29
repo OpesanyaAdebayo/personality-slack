@@ -27,8 +27,8 @@ let processTweets = (tweets) => {
                 reject(Error("Ouch! You either do not have sufficient tweets, or your language is not supported. Sorry."));
             } else {
                 var textSummary = v3EnglishTextSummaries.getSummary(personalityProfile);
-                console.log(textSummary);
-                // resolve(textSummary);
+                // console.log(textSummary);
+                resolve(textSummary);
             }
 
         });

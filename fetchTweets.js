@@ -1,3 +1,4 @@
+require('dotenv').config();
 let Twitter = require('twitter');
 let client = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -5,7 +6,6 @@ let client = new Twitter({
   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
-
 
 const fetchTweets = (username) => {
   return new Promise((resolve, reject) => {
@@ -25,6 +25,7 @@ const fetchTweets = (username) => {
       if (error) {
         reject(Error(error));
       }
+
       // Filter out tweets with only relevant info
       filteredTweets = newTweets.map(function (tweet) {
         return {

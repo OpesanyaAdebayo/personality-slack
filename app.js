@@ -24,7 +24,9 @@ var express = require('express'),
   urlencodedParser = bodyParser.urlencoded({
     extended: false
   }),
-  i18n = require('i18next');
+  i18n = require('i18next'),
+  fetchTweets = require('./fetchTweets'),
+  personality = require('./personality');
 
 app.use(bodyParser.json());
 
@@ -33,13 +35,6 @@ require('./config/i18n')(app);
 
 // Bootstrap application settings
 require('./config/express')(app);
-
-
-const personality_insights = new PersonalityInsightsV3({
-  username: process.env.PERSONALITY_INSIGHTS_USERNAME,
-  password: process.env.PERSONALITY_INSIGHTS_PASSWORD,
-  version_date: '2017-10-13'
-});
 
 app.get('/', function (req, res) {
   res.render('index', {
@@ -62,39 +57,19 @@ app.post('/api/profile', function (req, res, next) {
 
 
 app.post('/slack/commands', urlencodedParser, (req, res) => {
-  // res.status(200).end(); // best practice to respond with empty 200 status code
   var reqBody = req.body;
   var responseURL = reqBody.response_url;
   if (reqBody.token != process.env.SLACK_VERIFICATION_TOKEN){
       res.status(403).end("Access forbidden");
   }
   else {
-    var message = {text: "I am kinda working"};
-    res.json(message);
+    fetchTweets(reqBody.text)
+    .then((tweets) =>personality(tweets))
+    .then((personalitySummary) => res.json({text:personalitySummary}))
+    .catch(err => res.json({text: err}));
   }
-  // var responseURL = reqBody.response_url;
 
 });
-
-
-function sendMessageToSlackResponseURL(responseURL, JSONmessage){
-  var postOptions = {
-      uri: responseURL,
-      method: 'POST',
-      headers: {
-          'Content-type': 'application/json'
-      },
-      json: JSONmessage
-  };
-  request(postOptions, (error, response, body) => {
-      if (error){
-
-          // handle errors as you see fit
-      }
-  });
-}
-
-
 
 
 // error-handler settings
