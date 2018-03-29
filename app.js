@@ -57,18 +57,46 @@ app.post('/api/profile', function (req, res, next) {
 
 
 app.post('/slack/commands', urlencodedParser, (req, res) => {
+  res.status(200).end(); // best practice to respond with empty 200 status code
   var reqBody = req.body;
   var responseURL = reqBody.response_url;
-  if (reqBody.token != process.env.SLACK_VERIFICATION_TOKEN){
-      res.status(403).end("Access forbidden");
-  }
-  else {
+  if (reqBody.token != process.env.SLACK_VERIFICATION_TOKEN) {
+    res.status(403).end("Access forbidden");
+  } else {
     fetchTweets(reqBody.text)
-    .then((tweets) =>personality(tweets))
-    .then((personalitySummary) => res.json({text:personalitySummary}))
-    .catch(err => res.json({text: err}));
+      .then((tweets) => personality(tweets))
+      .then((personalitySummary) => sendResponse(responseURL, {
+        text: personalitySummary
+      }))
+      .catch(err => console.error(err));
   }
 
+});
+
+function sendResponse(responseURL, message) {
+  console.log(responseURL);
+  var postOptions = {
+    uri: responseURL,
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    json: message
+  };
+
+  request(
+    postOptions, (err, HTTPresponse, body) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(body);
+      }
+    });
+}
+
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at:', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
 });
 
 
