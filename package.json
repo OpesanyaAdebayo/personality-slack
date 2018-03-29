@@ -1,26 +1,42 @@
 {
-  "name": "personality-slack",
-  "version": "1.0.0",
-  "description": "A slack bot that lets you access IBM Watson Personality Insights API",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "PersonalityInsightsNodejsStarterApp",
+  "version": "0.1.10",
+  "description": "A sample nodejs app for Bluemix that use the Personality Insights service",
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "cookie-parser": "^1.4.0",
+    "csurf": "^1.8.3",
+    "dotenv": "^5.0.1",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "express-rate-limit": "^2.0.2",
+    "express-secure-only": "^0.2.1",
+    "helmet": "^0.13.0",
+    "i18next": "^1.10.2",
+    "morgan": "^1.6.1",
+    "request": "^2.65.0",
+    "twitter": "^1.7.1",
+    "watson-developer-cloud": "^3.2.1"
+  },
+  "engines": {
+    "node": ">=0.10"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpesanyaAdebayo/personality-slack.git"
+    "url": "https://github.com/watson-developer-cloud/personality-insights-nodejs.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "IBM Corp.",
+  "contributors": [
+    {
+      "name": "German Attanasio Ruiz",
+      "email": "germanatt@us.ibm.com"
+    }
+  ],
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/OpesanyaAdebayo/personality-slack/issues"
+    "url": "https://github.com/watson-developer-cloud/personality-insights-nodejs/issues"
   },
-  "homepage": "https://github.com/OpesanyaAdebayo/personality-slack#readme",
-  "dependencies": {
-    "@slack/events-api": "^1.0.1",
-    "body-parser": "^1.18.2",
-    "dotenv": "^5.0.1",
-    "express": "^4.16.3",
-    "request": "^2.85.0"
+  "scripts": {
+    "start": "node app.js"
   }
 }
