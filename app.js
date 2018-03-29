@@ -42,17 +42,34 @@ app.get('/', function (req, res) {
   });
 });
 
-app.post('/api/profile', function (req, res, next) {
-  var parameters = extend(req.body, {
-    acceptLanguage: i18n.lng()
+app.get('/slack', function (req, res) {
+  let data = {
+    form: {
+      client_id: process.env.SLACK_CLIENT_ID,
+      client_secret: process.env.SLACK_CLIENT_SECRET,
+      code: req.query.code
+    }
+  };
+  request.post('https://slack.com/api/oauth.access', data, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      if(JSON.parse(body).error == 'missing scope') {
+        res.send('Watson Bot has been added to your team!');
+      }
+      let token = JSON.parse(body).access_token;
+
+      request.post('https://slack.com/api/team.info', {form: {token: token}}, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          if(JSON.parse(body).error == 'missing_scope') {
+            res.send('Watson Bot has been added to your team!');
+          } else {
+            let team = JSON.parse(body).team.domain;
+            res.redirect('http://' +team+ '.slack.com');
+          }
+        }
+      });
+    }
   });
 
-  personalityInsights.profile(parameters, function (err, profile) {
-    if (err)
-      return next(err);
-    else
-      return res.json(profile);
-  });
 });
 
 
