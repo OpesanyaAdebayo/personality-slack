@@ -117,6 +117,7 @@ function sendResponse(responseURL, message, isErrorMessage) {
       })
       .then((response) => {
         imageUrl = response.data[0].source;
+        message.text+=`\n${imageUrl}`;
       });
   }
   var postOptions = {
