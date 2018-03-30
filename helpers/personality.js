@@ -27,9 +27,8 @@ let processTweets = (tweets) => {
             if (error && error.code == 400) {
                 return reject(Error(error));
             } else {
-                var textSummary = v3EnglishTextSummaries.getSummary(personalityProfile);
-                // console.log(textSummary);
-                resolve(textSummary);
+                let personalitySummary = v3EnglishTextSummaries.getSummary(personalityProfile);
+                resolve(personalitySummary);
             }
 
         });

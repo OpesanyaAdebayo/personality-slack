@@ -1,23 +1,6 @@
-/**
- * Copyright 2015 IBM Corp. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 require('dotenv').config();
-var express = require('express'),
+const express = require('express'),
   app = express(),
-  PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3'),
   extend = require('util')._extend,
   bodyParser = require('body-parser'),
   request = require('request'),
@@ -25,8 +8,9 @@ var express = require('express'),
     extended: false
   }),
   i18n = require('i18next'),
-  fetchTweets = require('./fetchTweets'),
-  personality = require('./personality');
+  fetchTweets = require('./helpers/fetchTweets'),
+  personality = require('./helpers/personality');
+sendResponse = require('./helpers/sendResponse');
 
 app.use(bodyParser.json());
 
@@ -76,11 +60,12 @@ app.get('/slack', function (req, res) {
 
 });
 
-
 app.post('/slack/commands', urlencodedParser, (req, res) => {
-  res.status(200).end(); // best practice to respond with empty 200 status code
-  var reqBody = req.body;
-  var responseURL = reqBody.response_url;
+  res.json({
+    text: "Please hold on for a bit while I compute results..."
+  }); // best practice to respond with empty 200 status code or message
+  let reqBody = req.body;
+  let responseURL = reqBody.response_url;
   if (reqBody.token != process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("Access forbidden");
   } else {
@@ -94,36 +79,26 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
       .then((tweets) => personality(tweets))
       .catch((err) => {
         let message = "Ouch! You either do not have sufficient tweets, or your language is not supported. Sorry.";
-
         sendResponse(responseURL, {
           text: message
         });
       })
-      .then((personalitySummary) => console.log(personalitySummary))
+      .then((personalitySummary) => sendResponse(responseURL, {
+        text: personalitySummary
+      }))
       .catch(err => console.error(err));
   }
 
 });
 
-function sendResponse(responseURL, message) {
-  var postOptions = {
-    uri: responseURL,
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json'
-    },
-    json: message
-  };
+app.post('/slack/commands/team', urlencodedParser, (req, res) => {
 
-  request(
-    postOptions, (err, HTTPresponse, body) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(body);
-      }
-    });
-}
+  res.json({
+    name: bayo
+  });
+});
+
+
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
