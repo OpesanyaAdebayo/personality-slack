@@ -110,6 +110,9 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
 
 function sendResponse(responseURL, message, isErrorMessage) {
   let imageUrl;
+
+
+
   if (isErrorMessage == true) {
     GphApiClient.translate('gifs', {
         "s": 'sorry',
@@ -118,28 +121,52 @@ function sendResponse(responseURL, message, isErrorMessage) {
       .then((response) => {
         imageUrl = response.data[0].source;
         message.text+=`\n${imageUrl}`;
-      });
-  }
-  var postOptions = {
-    uri: responseURL,
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json'
-    },
-    json: message,
-    attachments: [{
-      image_url: imageUrl
-    }]
-  };
 
-  request(
-    postOptions, (err, HTTPresponse, body) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(body);
-      }
-    });
+        var postOptions = {
+          uri: responseURL,
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          json: message,
+          attachments: [{
+            image_url: imageUrl
+          }]
+        };
+
+          request(
+            postOptions, (err, HTTPresponse, body) => {
+              if (err) {
+                console.error(err);
+              } else {
+                console.log(body);
+              }
+            });
+
+      });
+  } else {
+    var postOptions = {
+      uri: responseURL,
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      json: message,
+      attachments: [{
+        image_url: imageUrl
+      }]
+    };
+
+      request(
+        postOptions, (err, HTTPresponse, body) => {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(body);
+          }
+        });
+
+  }
 }
 
 process.on('unhandledRejection', (reason, p) => {
