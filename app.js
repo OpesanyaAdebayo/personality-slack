@@ -26,8 +26,7 @@ var express = require('express'),
   }),
   i18n = require('i18next'),
   fetchTweets = require('./fetchTweets'),
-  personality = require('./personality'),
-  GphApiClient = require('giphy-js-sdk-core')(process.env.GIPHY_API_KEY);
+  personality = require('./personality');
 
 app.use(bodyParser.json());
 
@@ -90,7 +89,7 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
         let message = "There was a problem fetching tweets.\nPlease check the handle and make sure it's correct.";
         sendResponse(responseURL, {
           text: message
-        }, true);
+        });
       })
       .then((tweets) => personality(tweets))
       .catch((err) => {
@@ -98,75 +97,32 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
 
         sendResponse(responseURL, {
           text: message
-        }, true);
+        });
       })
-      .then((personalitySummary) => sendResponse(responseURL, {
-        text: personalitySummary
-      }, false))
+      .then((personalitySummary) => console.log(personalitySummary))
       .catch(err => console.error(err));
   }
 
 });
 
-function sendResponse(responseURL, message, isErrorMessage) {
-  let imageUrl;
+function sendResponse(responseURL, message) {
+  var postOptions = {
+    uri: responseURL,
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    json: message
+  };
 
-
-
-  if (isErrorMessage == true) {
-    GphApiClient.translate('gifs', {
-        "s": 'sorry',
-        "lang": 'en'
-      })
-      .then((response) => {
-        imageUrl = response.data[0].source;
-        message.text+=`\n${imageUrl}`;
-
-        var postOptions = {
-          uri: responseURL,
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json'
-          },
-          json: message,
-          attachments: [{
-            image_url: imageUrl
-          }]
-        };
-
-          request(
-            postOptions, (err, HTTPresponse, body) => {
-              if (err) {
-                console.error(err);
-              } else {
-                console.log(body);
-              }
-            });
-
-      });
-  } else {
-    var postOptions = {
-      uri: responseURL,
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      json: message,
-      attachments: [{
-        image_url: imageUrl
-      }]
-    };
-
-      request(
-        postOptions, (err, HTTPresponse, body) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log(body);
-          }
-        });
-
-  }
+  request(
+    postOptions, (err, HTTPresponse, body) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(body);
+      }
+    });
 }
 
 process.on('unhandledRejection', (reason, p) => {
