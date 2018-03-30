@@ -116,7 +116,7 @@ function sendResponse(responseURL, message, isErrorMessage) {
         "lang": 'en'
       })
       .then((response) => {
-        imageUrl = response.data[0].embed_url;
+        imageUrl = response.data[0].source;
       });
   }
   var postOptions = {
