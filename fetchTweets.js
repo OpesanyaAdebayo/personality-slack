@@ -23,7 +23,7 @@ const fetchTweets = (username) => {
 
     const fetchTweets = (error, newTweets) => {
       if (error) {
-        reject(Error(error));
+        return reject(Error(error));
       }
       if(newTweets.errors) {
           console.log(newTweets.errors[0].code);

@@ -87,9 +87,18 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
     fetchTweets(reqBody.text)
       .catch((err) => {
         let message = "There was a problem fetching tweets.\nPlease check the handle and make sure it's correct.";
-        sendResponse(responseURL,{message: message});
+        sendResponse(responseURL, {
+          text: message
+        });
       })
       .then((tweets) => personality(tweets))
+      .catch((err) => {
+        let message = "Ouch! You either do not have sufficient tweets, or your language is not supported. Sorry.";
+        
+        sendResponse(responseURL, {
+          text: message
+        });
+      })
       .then((personalitySummary) => console.log(personalitySummary))
       .catch(err => console.error(err));
   }
@@ -97,7 +106,6 @@ app.post('/slack/commands', urlencodedParser, (req, res) => {
 });
 
 function sendResponse(responseURL, message) {
-  console.log(responseURL);
   var postOptions = {
     uri: responseURL,
     method: 'POST',

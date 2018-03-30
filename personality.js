@@ -22,9 +22,10 @@ let processTweets = (tweets) => {
                 'accept': 'application/json'
             }
         };
+        // console.log(tweets);
         personality_insights.profile(params, function (error, personalityProfile) {
             if (error && error.code == 400) {
-                reject(Error("Ouch! You either do not have sufficient tweets, or your language is not supported. Sorry."));
+                return reject(Error(error));
             } else {
                 var textSummary = v3EnglishTextSummaries.getSummary(personalityProfile);
                 // console.log(textSummary);
